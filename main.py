@@ -12,6 +12,7 @@ bw_option = '-b'
 options = [limit_option, reset_option, show_option, help_option, path_option, bw_option]
 
 path_to_config_file = "config_files/config.json"
+path_to_help_file = "config_files/help.json"
 
 #Possible usages:
     # main.py -l
@@ -24,7 +25,6 @@ path_to_config_file = "config_files/config.json"
     # {h} can't be combined with anything
 
 def main(args):
-    print(args)
     if help_option in args and len(args) == 1:
         show_help()
     else:
@@ -46,19 +46,19 @@ def main(args):
                 update_default_bw(args[bw_index])
             args.remove(args[bw_index])
             args.remove(args[bw_index-1])
-    if len(args) > 1:
-        error_exit()
-    else:
-        if limit_option in args:
-            limit()
+        if len(args) > 1:
+            error_exit()
         else:
-            if reset_option in args:
-                reset()
+            if limit_option in args:
+                limit()
             else:
-                if show_option in args:
-                    show()
+                if reset_option in args:
+                    reset()
                 else:
-                    error_exit()
+                    if show_option in args:
+                        show()
+                    else:
+                        error_exit()
 
 
 
@@ -75,7 +75,31 @@ def show():
 
 
 def show_help():
-    pass
+    """
+    Show help text that gives instructions on how to use the program.
+    :return:
+    """
+    try:
+        with open(path_to_help_file, "r") as jsonFile:
+            data = json.load(jsonFile)
+        print("Description:")
+        print("             " + data['Description'])
+        print("Options:")
+        for k, v in data.items():
+            if k == "Options":
+                for k1, v1 in v.items():
+                    print("             " + v1['Command'] + ": " + v1['Description'])
+        print("Usage:")
+        for k,v in data.items():
+            if k == 'Usage':
+                for k1, v1 in v.items():
+                    print("             Example:")
+                    print("             " + v1['Command'])
+                    print("             " + v1['Description'])
+                    print("")
+    except:
+        print("Showing help failed!")
+        exit(1)
 
 
 def update_link_info_path(path_to_link_info):

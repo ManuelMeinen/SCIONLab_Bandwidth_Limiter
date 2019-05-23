@@ -1,0 +1,47 @@
+{
+    "Description": "This program is used to limit the bandwidth to different SCIONLab user-ASes. If there are no user-ASes then no limits will be enforced.",
+    "Options": {
+      "Option1": {
+        "Command": "-h",
+        "Description": "Show this text."
+      },
+      "Option2": {
+        "Command": "-l",
+        "Description": "Limit the bandwidth according to the link info file."
+      },
+      "Option3": {
+        "Command": "-r",
+        "Description": "Reset any previous bandwidth limitations."
+      },
+      "Option4": {
+        "Command": "-s",
+        "Description": "Show the current TC configurations for all the interfaces available on this machine."
+      },
+      "Option5": {
+        "Command": "-p",
+        "Description": "Update or set the path to the link info file. (The argument must be the valid path to the link info file obtained by the SCIONLab server.)"
+      },
+      "Option6": {
+        "Command": "-b",
+        "Description": "Update or set the default bandwidth for interfaces that are used to connect to user-ASes [Kbps]"
+      }
+    },
+    "Usage": {
+      "Example1": {
+        "Command": "python3 main.py -l",
+        "Description": "Limit the bandwidth according to the link_info.json file."
+      },
+      "Example2": {
+        "Command": "python3 main.py -r",
+        "Description": "Reset any bandwidth limitations."
+      },
+      "Example3": {
+        "Command": "python3 main.py -s",
+        "Description": "Show the current TC configuration."
+      },
+      "Example4": {
+        "Command": "python3 main.py -l -b 1000 -p /path/to/link/info.json",
+        "Description": "Update the path to the link_info.json file, update the default bandwidth and then limit the bandwith according to the link_info.json file."
+      }
+    }
+}
