@@ -1,0 +1,14 @@
+{
+  "1": {
+        "AS_ID": 1102,
+        "IsUserAS": false,
+        "Bandwidth": 1000,
+        "IP-Address": "195.176.112.45"
+    },
+    "2": {
+        "AS_ID": 1,
+        "IsUserAS": true,
+        "Bandwidth": 500,
+        "IP-Address": "192.168.17.129"
+    }
+}
