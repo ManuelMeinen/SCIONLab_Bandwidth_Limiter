@@ -11,6 +11,8 @@ bw_option = '-b'
 
 options = [limit_option, reset_option, show_option, help_option, path_option, bw_option]
 
+path_to_config_file = "config_files/config.json"
+
 #Possible usages:
     # main.py -l
     # main.py -r
@@ -77,17 +79,22 @@ def show_help():
 
 
 def update_link_info_path(path_to_link_info):
+    """
+    Update the path to the link info file in the config.json file
+    :param path_to_link_info: The path to link_info.json
+    :return:
+    """
     if not systeminfo.file_exists(path_to_link_info):
         print("File "+str(path_to_link_info)+" does not exist")
         exit(1)
     else:
         try:
-            with open("config_files/config.json", "r") as jsonFile:
+            with open(path_to_config_file, "r") as jsonFile:
                 data = json.load(jsonFile)
 
             data["PathToLinkInfo"] = path_to_link_info
 
-            with open("config_files/config.json", "w") as jsonFile:
+            with open(path_to_config_file, "w") as jsonFile:
                 json.dump(data, jsonFile, indent=4)
         except:
             print("Updating the path in config.json failed!")
@@ -95,10 +102,36 @@ def update_link_info_path(path_to_link_info):
 
 
 def update_default_bw(default_bandwidth):
-    pass
+    """
+    Update the default bandwidth in the config.json file
+    :param default_bandwidth: The default bandwidth (positive integer)
+    :return:
+    """
+    try:
+        bw = int(default_bandwidth)
+    except ValueError:
+        error_exit()
+
+    if bw < 0:
+        error_exit()
+    try:
+        with open(path_to_config_file, "r") as jsonFile:
+            data = json.load(jsonFile)
+
+        data["DefaultBandwidth"] = bw
+
+        with open(path_to_config_file, "w") as jsonFile:
+            json.dump(data, jsonFile, indent=4)
+    except:
+        print("Updating the default bandwidth in config.json failed!")
+        exit(1)
 
 
 def error_exit():
+    """
+    Exit because there were invalid arguments.
+    :return:
+    """
     print("Invalid arguments!")
     print("Type -h to get help.")
     exit(0)
