@@ -19,6 +19,7 @@ class IngressQdisc(TcQdisc):
         self.handle = self.ingress_qdisc_handle
 
     def add_filter(self, redirect_filter):
+        redirect_filter.parent = self.handle
         self.redirect_filter = redirect_filter
 
     def make(self):
@@ -44,11 +45,12 @@ class EgressQdisc(TcQdisc):
         tc_class.parent = self.handle
 
     def add_filter(self, classifier_filter):
+        classifier_filter.parent = self.handle
         self.filters.append(classifier_filter)
 
     def add_default_class(self, default_class):
-        self.default_class = default_class
         default_class.parent = self.handle
+        self.default_class = default_class
 
     def make(self):
         tcg = TCCommandGenerator()
@@ -84,25 +86,39 @@ class DefaultClass(TcClass):
         TcClass.__init__(self, dev=dev, classid=TcQdisc.default_class_handle, bandwidth=bandwidth)
 
     def make(self):
+        tcg = TCCommandGenerator()
         print("Make Default Class")
+        print(tcg.add_class(self))
 
 
 class TcFiter:
-    def __init__(self):
-        pass
+    def __init__(self, dev):
+        self.dev = dev
+        self.parent = 0 # Is set by adding it to the qdisc
 
 
 class ClassifierFilter(TcFiter):
-    def __init__(self):
-        TcFiter.__init__(self)
+    def __init__(self, dev, target_class, ip_addr):
+        TcFiter.__init__(self, dev=dev)
+        self.target_class = target_class
+        self.ip_addr = ip_addr
+        if self.parent == TcQdisc.root_qdisc_handle:
+            self.direction = 'dst'
+        else:
+            self.direction = 'src'
 
     def make(self):
+        tcg = TCCommandGenerator()
         print("Make ClassifierFilter")
+        print(tcg.add_classifier_filter(self))
 
 
 class RedirectFilter(TcFiter):
-    def __init__(self):
-        TcFiter.__init__(self)
+    def __init__(self, dev, target_dev):
+        TcFiter.__init__(self, dev=dev)
+        self.target_dev = target_dev
 
     def make(self):
+        tcg = TCCommandGenerator()
         print("Make RedirectFilter")
+        print(tcg.add_redirect_filter(self))

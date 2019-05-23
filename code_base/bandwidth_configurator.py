@@ -12,13 +12,15 @@ class BandwidthConfigurator:
         # TODO(mmeinen) get right default bandwidth
         default_bandwidth = 1000
         for dev in self.links.used_interfaces:
+            # TODO(mmeinen) find correct virtual interface
+            virtual_dev = dev
             print("###################### Configure interface "+dev.name+" ######################")
             root_egress_qdisc = EgressQdisc(dev=dev)
             ingress_qdisc = IngressQdisc(dev=dev)
             virtual_qdisc = EgressQdisc(dev=dev)
             default_egress_class = DefaultClass(dev=dev, bandwidth=default_bandwidth)
             default_virtual_class = DefaultClass(dev=dev, bandwidth=default_bandwidth)
-            redirect_filter = RedirectFilter()
+            redirect_filter = RedirectFilter(dev=dev, target_dev=virtual_dev)
             root_egress_qdisc.add_default_class(default_egress_class)
             virtual_qdisc.add_default_class(default_virtual_class)
             ingress_qdisc.add_filter(redirect_filter)
@@ -26,11 +28,11 @@ class BandwidthConfigurator:
                 if link.dev == dev and link.is_user_as:
                     #Configure interface for this link
                     egress_class = TcClass(dev=dev, classid=link.as_id, bandwidth=link.bandwidth)
-                    egress_filter = ClassifierFilter()
+                    egress_filter = ClassifierFilter(dev=dev, ip_addr=link.ip_addr, target_class=link.as_id)
                     root_egress_qdisc.add_class(egress_class)
                     root_egress_qdisc.add_filter(egress_filter)
                     virtual_class = TcClass(dev=dev, classid=link.as_id, bandwidth=link.bandwidth)
-                    virtual_filter = ClassifierFilter()
+                    virtual_filter = ClassifierFilter(dev=dev, ip_addr=link.ip_addr, target_class=link.as_id)
                     virtual_qdisc.add_class(virtual_class)
                     virtual_qdisc.add_filter(virtual_filter)
 

@@ -55,7 +55,7 @@ class TCCommandGenerator:
 
     def add_class(self, tc_class):
         """
-        Return the command to add a normal class to TC
+        Return the command to add a class to TC
         :param tc_class: the class to add
         :return: the TC command
         """
@@ -71,11 +71,30 @@ class TCCommandGenerator:
         return self._join([self.CLASS_ADD, str_dev, 'parent', str_parent, 'classid', str_classid, 'htb', 'rate',
                            str_rate, 'ceil', str_ceil, 'burst', str_burst, 'prio', str_prio, 'mtu', str_mtu])
 
-    def add_default_class(self, default_class):
-        pass
-
     def add_classifier_filter(self, classifier_filter):
-        pass
+        """
+        Return the command to add a classifier filter to TC
+        :param classifier_filter: the filter to add
+        :return: the TC command
+        """
+        # sudo tc filter add dev ens33 u32 match ip dst 192.168.17.129/32 flowid 1:1
+        str_dev = str(classifier_filter.dev.name)
+        str_direction = str(classifier_filter.direction)
+        str_ip_addr = str(classifier_filter.target_class)
+        str_flowid = str(classifier_filter.parent) + ':' + str(classifier_filter.target_class)
+        return self._join([self.FILTER_ADD, str_dev, 'u32', 'match', 'ip', str_direction, str_ip_addr, 'flowid',
+                           str_flowid])
 
     def add_redirect_filter(self, redirect_filter):
-        pass
+        """
+        Return the command to add a redirect filter to TC
+        :param redirect_filter: the filter to add
+        :return: the TC command
+        """
+        # sudo tc filter add dev ens33 parent ffff: protocol ip u32 match u32 0 0 action mirred egress redirect dev ifb1
+        str_dev = str(redirect_filter.dev.name)
+        str_parent = str(redirect_filter.parent) + ':'
+        str_target_dev = str(redirect_filter.target_dev.name)
+        return self._join([self.FILTER_ADD, str_dev, 'parent', str_parent, 'protocol', 'ip', 'u32', 'match', 'u32', '0',
+                           '0', 'action', 'mirred', 'egress', 'redirect', 'dev', str_target_dev])
+
