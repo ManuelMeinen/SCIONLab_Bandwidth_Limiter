@@ -1,6 +1,8 @@
 import sys
 import json
 from code_base import systeminfo
+from code_base.bandwidth_configurator import BandwidthConfigurator
+from code_base.constants import Constants
 
 limit_option = '-l'
 reset_option = '-r'
@@ -11,20 +13,13 @@ bw_option = '-b'
 
 options = [limit_option, reset_option, show_option, help_option, path_option, bw_option]
 
-path_to_config_file = "config_files/config.json"
-path_to_help_file = "config_files/help.json"
-
-#Possible usages:
-    # main.py -l
-    # main.py -r
-    # main.py -s
-    # main.py -h
-    # main.py -p path/to/link/info
-    # main.py -b 1234
-    # {l,r,s} can be combined with one or two of {p,b}
-    # {h} can't be combined with anything
 
 def main(args):
+    """
+    Execute the program according to command line inputs.
+    :param args: command line inputs
+    :return:
+    """
     if help_option in args and len(args) == 1:
         show_help()
     else:
@@ -61,16 +56,19 @@ def main(args):
                         error_exit()
 
 
-
 def limit():
-    pass
+    # TODO(mmeinen): implement
+    bwc = BandwidthConfigurator()
+    bwc.limit()
 
 
 def reset():
+    # TODO(mmeinen): implement
     pass
 
 
 def show():
+    # TODO(mmeinen): implement
     pass
 
 
@@ -80,7 +78,7 @@ def show_help():
     :return:
     """
     try:
-        with open(path_to_help_file, "r") as jsonFile:
+        with open(Constants.path_to_help_file, "r") as jsonFile:
             data = json.load(jsonFile)
         print("Description:")
         print("             " + data['Description'])
@@ -113,12 +111,12 @@ def update_link_info_path(path_to_link_info):
         exit(1)
     else:
         try:
-            with open(path_to_config_file, "r") as jsonFile:
+            with open(Constants.path_to_config_file, "r") as jsonFile:
                 data = json.load(jsonFile)
 
             data["PathToLinkInfo"] = path_to_link_info
 
-            with open(path_to_config_file, "w") as jsonFile:
+            with open(Constants.path_to_config_file, "w") as jsonFile:
                 json.dump(data, jsonFile, indent=4)
         except:
             print("Updating the path in config.json failed!")
@@ -139,12 +137,12 @@ def update_default_bw(default_bandwidth):
     if bw < 0:
         error_exit()
     try:
-        with open(path_to_config_file, "r") as jsonFile:
+        with open(Constants.path_to_config_file, "r") as jsonFile:
             data = json.load(jsonFile)
 
         data["DefaultBandwidth"] = bw
 
-        with open(path_to_config_file, "w") as jsonFile:
+        with open(Constants.path_to_config_file, "w") as jsonFile:
             json.dump(data, jsonFile, indent=4)
     except:
         print("Updating the default bandwidth in config.json failed!")
