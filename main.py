@@ -71,7 +71,7 @@ def reset():
     :return:
     """
     # TODO(mmeinen): implement
-    pass
+    print("Reset not implemented yet...")
 
 
 def show():
@@ -80,7 +80,7 @@ def show():
     :return:
     """
     # TODO(mmeinen): implement
-    pass
+    print("Show not implemented yet...")
 
 
 def show_help():
