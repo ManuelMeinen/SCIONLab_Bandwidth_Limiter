@@ -139,10 +139,13 @@ class ClassifierFilter(TcFilter):
     def __init__(self, dev, target_class, ip_addr):
         TcFilter.__init__(self, dev=dev)
         self.target_class = target_class
+        # TODO(mmeinen) add support for IPv6 (protocol = ipv6 instead of ip and match ip6 instead of ip)
         if is_ipv4(ip_addr=ip_addr):
             self.ip_addr = ip_addr+'/32'
+            self.ip_version = 4
         else:
-            self.ip_addr = ip_addr
+            self.ip_addr = ip_addr+'/128'
+            self.ip_version = 6
             print(ip_addr+"  is not a IPv4 address. Currently only IPv4 addresses are supported.")
         if dev.is_virtual:
             self.direction = 'src'
@@ -169,6 +172,7 @@ class RedirectFilter(TcFilter):
         Recursively turn the TC logic into TC configuration
         :return:
         """
+        # TODO(mmeinen) also add a redirect filter for IPv6
         tcg = TCCommandGenerator()
         print("Make RedirectFilter")
         CmdExecutor.run_and_print(tcg.add_redirect_filter(self))

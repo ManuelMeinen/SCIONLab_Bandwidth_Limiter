@@ -78,7 +78,11 @@ class TCCommandGenerator:
         str_direction = str(classifier_filter.direction)
         str_ip_addr = str(classifier_filter.ip_addr)
         str_flowid = str(classifier_filter.parent) + ':' + str(classifier_filter.target_class)
-        return self._join([self.FILTER_ADD, str_dev, 'u32', 'match', 'ip', str_direction, str_ip_addr, 'flowid',
+        if classifier_filter.ip_version == 4:
+            str_ip = 'ip'
+        else:
+            str_ip = 'ip6'
+        return self._join([self.FILTER_ADD, str_dev, 'u32', 'match', str_ip, str_direction, str_ip_addr, 'flowid',
                            str_flowid])
 
     def add_redirect_filter(self, redirect_filter):
@@ -87,6 +91,7 @@ class TCCommandGenerator:
         :param redirect_filter: the filter to add
         :return: the TC command
         """
+        # TODO(mmeinen) check how redirect filters would work for IPv6
         str_dev = str(redirect_filter.dev.name)
         str_parent = str(redirect_filter.parent) + ':'
         str_target_dev = str(redirect_filter.target_dev.name)
