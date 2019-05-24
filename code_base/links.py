@@ -1,7 +1,8 @@
 import json
 from code_base import systeminfo
-from code_base.interfaces import Interfaces
+from code_base.interfaces import Interfaces, Interface
 from code_base.constants import Constants
+from code_base.virtual_interfaces_manager import VirtualInterfacesManager
 
 
 class Links:
@@ -28,6 +29,14 @@ class Links:
             link_obj = Link(as_id, is_user_as, bandwidth, other_ip_addr, dev)
             self.links.append(link_obj)
 
+        vim = VirtualInterfacesManager()
+        vim.set_used_interfaces(self.used_interfaces)
+        vim.set_up_virtual_interfaces()
+        self.virtual_interfaces = {}
+        for dev in self.used_interfaces:
+            self.virtual_interfaces[dev.name] = Interface(vim.virtual_interfaces[dev.name])
+            # set_virtual_interface(vim.virtual_interfaces[link.dev.name])
+
     # def print_all(self):
     #     for link in self.links:
     #         link.print_link()
@@ -41,6 +50,9 @@ class Link:
         self.bandwidth = bandwidth
         self.ip_addr = ip_addr
         self.dev = dev
+
+    # def set_virtual_interface(self, virtual_interface):
+    #     self.virtual_dev = virtual_interface
 
     # def print_link(self):
     #     print("##################################################")
