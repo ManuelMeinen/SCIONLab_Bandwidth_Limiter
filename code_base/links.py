@@ -8,6 +8,9 @@ from code_base.virtual_interfaces_manager import VirtualInterfacesManager
 class Links:
 
     def __init__(self):
+        """
+        For all links define link objects and set up the interfaces (both physical and virtual ones).
+        """
         with open(Constants.path_to_config_file)as s:
             data_string = json.load(s)
         path_to_link_info = data_string['PathToLinkInfo']
@@ -35,11 +38,6 @@ class Links:
         self.virtual_interfaces = {}
         for dev in self.used_interfaces:
             self.virtual_interfaces[dev.name] = Interface(vim.virtual_interfaces[dev.name])
-            # set_virtual_interface(vim.virtual_interfaces[link.dev.name])
-
-    # def print_all(self):
-    #     for link in self.links:
-    #         link.print_link()
 
 
 class Link:
@@ -50,15 +48,3 @@ class Link:
         self.bandwidth = bandwidth
         self.ip_addr = ip_addr
         self.dev = dev
-
-    # def set_virtual_interface(self, virtual_interface):
-    #     self.virtual_dev = virtual_interface
-
-    # def print_link(self):
-    #     print("##################################################")
-    #     print("AS ID: " + str(self.as_id))
-    #     print("Is user AS: " + str(self.is_user_as))
-    #     print("Bandwith: " + str(self.bandwidth))
-    #     print("IP-Address: " + self.ip_addr)
-    #     print("Interface:")
-    #     self.dev.show_interface()

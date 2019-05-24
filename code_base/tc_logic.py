@@ -21,10 +21,19 @@ class IngressQdisc(TcQdisc):
         self.handle = self.ingress_qdisc_handle
 
     def add_filter(self, redirect_filter):
+        """
+        Add a redirect filter to the ingress qdisc
+        :param redirect_filter: the filter to add
+        :return:
+        """
         redirect_filter.parent = self.handle
         self.redirect_filter = redirect_filter
 
     def make(self):
+        """
+        Recursively turn the TC logic into TC configuration
+        :return:
+        """
         tcg = TCCommandGenerator()
         print("Make ingress QDISC")
         CmdExecutor.run_and_print(tcg.add_ingress_qdisc(self))
@@ -43,18 +52,37 @@ class EgressQdisc(TcQdisc):
         self.filters = []
 
     def add_class(self, tc_class):
+        """
+        Add a class to the egress qdisc.
+        :param tc_class: the class to add
+        :return:
+        """
         self.classes.append(tc_class)
         tc_class.parent = self.handle
 
     def add_filter(self, classifier_filter):
+        """
+        Add a classifier filter to the egress qdisc.
+        :param classifier_filter: the filter to add
+        :return:
+        """
         classifier_filter.parent = self.handle
         self.filters.append(classifier_filter)
 
     def add_default_class(self, default_class):
+        """
+        Add a default class to the egress qdisc.
+        :param default_class: the class to add
+        :return:
+        """
         default_class.parent = self.handle
         self.default_class = default_class
 
     def make(self):
+        """
+        Recursively turn the TC logic into TC configuration
+        :return:
+        """
         tcg = TCCommandGenerator()
         print("Make egress QDISC")
         CmdExecutor.run_and_print(tcg.add_egress_qdisc(self))
@@ -78,6 +106,10 @@ class TcClass:
         pass
 
     def make(self):
+        """
+        Recursively turn the TC logic into TC configuration
+        :return:
+        """
         tcg = TCCommandGenerator()
         print("Make TcClass")
         CmdExecutor.run_and_print(tcg.add_class(self))
@@ -88,6 +120,10 @@ class DefaultClass(TcClass):
         TcClass.__init__(self, dev=dev, classid=TcQdisc.default_class_handle, bandwidth=bandwidth)
 
     def make(self):
+        """
+        Recursively turn the TC logic into TC configuration
+        :return:
+        """
         tcg = TCCommandGenerator()
         print("Make Default Class")
         CmdExecutor.run_and_print(tcg.add_class(self))
@@ -114,6 +150,10 @@ class ClassifierFilter(TcFilter):
             self.direction = 'dst'
 
     def make(self):
+        """
+        Recursively turn the TC logic into TC configuration
+        :return:
+        """
         tcg = TCCommandGenerator()
         print("Make ClassifierFilter")
         CmdExecutor.run_and_print(tcg.add_classifier_filter(self))
@@ -125,6 +165,10 @@ class RedirectFilter(TcFilter):
         self.target_dev = target_dev
 
     def make(self):
+        """
+        Recursively turn the TC logic into TC configuration
+        :return:
+        """
         tcg = TCCommandGenerator()
         print("Make RedirectFilter")
         CmdExecutor.run_and_print(tcg.add_redirect_filter(self))

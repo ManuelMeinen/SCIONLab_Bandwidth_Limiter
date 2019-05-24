@@ -57,17 +57,28 @@ def main(args):
 
 
 def limit():
-    # TODO(mmeinen): implement
+    """
+    Do the bandwidth limitations
+    :return:
+    """
     bwc = BandwidthConfigurator()
     bwc.limit()
 
 
 def reset():
+    """
+    Reset previously set bandwidth limitations
+    :return:
+    """
     # TODO(mmeinen): implement
     pass
 
 
 def show():
+    """
+    Show current TC configuration
+    :return:
+    """
     # TODO(mmeinen): implement
     pass
 

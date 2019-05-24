@@ -28,16 +28,12 @@ class Interfaces:
             interfaces.append(interface)
         self.interfaces = interfaces
 
-    # def show_interfaces(self):
-    #     """
-    #     Print the interfaces to the console
-    #     :return:
-    #     """
-    #     self.refresh()
-    #     for interface in self.interfaces:
-    #         interface.show_interface()
-
     def get_interface(self, name):
+        """
+        Return the interface with the name 'name'
+        :param name: the name of the interface
+        :return: the interface
+        """
         self.refresh()
         for interface in self.interfaces:
             if interface.name == name:
@@ -68,12 +64,3 @@ class Interface:
                 return int(words[words.index(word)+1])
         print("MTU was not determined successfully.")
         return 0
-
-    # def show_interface(self):
-    #     """
-    #     Print the interface to the console
-    #     :return:
-    #     """
-    #     print("-----------" + self.name + "-----------")
-    #     print("isVirtual: " + str(self.is_virtual))
-    #     print("MTU: " + str(self.mtu))

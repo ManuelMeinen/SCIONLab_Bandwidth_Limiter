@@ -8,18 +8,8 @@ def get_interface_names():
     :return: list of strings
     """
     return os.listdir('/sys/class/net/')
-#
-#
-# def file_exists_in_dir(dir_path, file_name):
-#     """
-#     Check if a file exists in a given directory
-#     :param dir_path: Path where we want to check for a file
-#     :param file_name: Name of the file
-#     :return: True iff the file exists in that directory
-#     """
-#     return os.path.isfile(os.path.join(dir_path, file_name))
-#
-#
+
+
 def file_exists(absolute_path):
     """
     Check if a file exists given the absolute path to that file
@@ -51,7 +41,10 @@ def get_interface_used_for_connection(ip_addr):
 
 
 def get_default_interface():
-    #TODO(mmeinen) add comment
+    """
+    Return the name of the default interface.
+    :return: the name of the default interface
+    """
     try:
         out = subprocess.check_output("sudo route", universal_newlines=True, shell=True)
         lines = out.split('\n')

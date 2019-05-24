@@ -35,7 +35,6 @@ class TCCommandGenerator:
         :param egress_qdisc: the egress qdisc to add
         :return:the TC command
         """
-        # sudo tc qdisc add dev ens33 root handle 1: htb default 9999
         str_dev = str(egress_qdisc.dev.name)
         str_handle = str(egress_qdisc.handle) + ':'
         str_default_class_handle = str(egress_qdisc.default_class_handle)
@@ -48,7 +47,6 @@ class TCCommandGenerator:
         :param ingress_qdisc: the ingress qdisc to add
         :return: the TC command
         """
-        # sudo tc qdisc add dev ens33 handle ffff: ingress
         str_dev = str(ingress_qdisc.dev.name)
         str_handle = str(ingress_qdisc.handle) + ':'
         return self._join([self.QDISC_ADD, str_dev, 'handle', str_handle, 'ingress'])
@@ -59,7 +57,6 @@ class TCCommandGenerator:
         :param tc_class: the class to add
         :return: the TC command
         """
-        #sudo tc class add dev ens33 parent 1:0 classid 1:1 htb rate 500kbit ceil 500kbit burst 5k prio 1 mtu 1500
         str_dev = str(tc_class.dev.name)
         str_parent = str(tc_class.parent) + ':0'
         str_classid = str(tc_class.parent) + ':' + str(tc_class.classid)
@@ -77,7 +74,6 @@ class TCCommandGenerator:
         :param classifier_filter: the filter to add
         :return: the TC command
         """
-        # sudo tc filter add dev ens33 u32 match ip dst 192.168.17.129/32 flowid 1:1
         str_dev = str(classifier_filter.dev.name)
         str_direction = str(classifier_filter.direction)
         str_ip_addr = str(classifier_filter.ip_addr)
@@ -91,7 +87,6 @@ class TCCommandGenerator:
         :param redirect_filter: the filter to add
         :return: the TC command
         """
-        # sudo tc filter add dev ens33 parent ffff: protocol ip u32 match u32 0 0 action mirred egress redirect dev ifb1
         str_dev = str(redirect_filter.dev.name)
         str_parent = str(redirect_filter.parent) + ':'
         str_target_dev = str(redirect_filter.target_dev.name)

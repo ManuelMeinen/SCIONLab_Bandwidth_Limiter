@@ -2,7 +2,6 @@ import json
 from code_base.links import Links
 from code_base.tc_logic import EgressQdisc, IngressQdisc, DefaultClass, TcClass, ClassifierFilter, RedirectFilter
 from code_base.constants import Constants
-from code_base.virtual_interfaces_manager import VirtualInterfacesManager
 
 
 class BandwidthConfigurator:
@@ -13,7 +12,10 @@ class BandwidthConfigurator:
         self.links = links
 
     def limit(self):
-        # TODO(mmeinen) get right default bandwidth
+        """
+        Limit the bandwidth according to the link_info.json file
+        :return:
+        """
         default_bandwidth = 0
         try:
             with open(Constants.path_to_config_file, "r") as jsonFile:
@@ -51,4 +53,9 @@ class BandwidthConfigurator:
             virtual_qdisc.make()
 
     def reset(self):
+        """
+        Reset previously set bandwidth limitations
+        :return:
+        """
+        # TODO(mmeinen) implement
         pass
