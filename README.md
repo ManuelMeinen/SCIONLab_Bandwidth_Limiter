@@ -28,7 +28,7 @@ To be able to run this program you need Python3 and TC (iproute2) installed on y
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
 
 ## About SCION/SCIONLab
 To learn more about SCIONLab visit:   
