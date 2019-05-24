@@ -95,7 +95,7 @@ def show_help():
                     print("             " + v1['Command'])
                     print("             " + v1['Description'])
                     print("")
-    except:
+    except json.JSONDecodeError as e:
         print("Showing help failed!")
         exit(1)
 
@@ -118,7 +118,7 @@ def update_link_info_path(path_to_link_info):
 
             with open(Constants.path_to_config_file, "w") as jsonFile:
                 json.dump(data, jsonFile, indent=4)
-        except:
+        except json.JSONDecodeError as e:
             print("Updating the path in config.json failed!")
             exit(1)
 
@@ -144,7 +144,7 @@ def update_default_bw(default_bandwidth):
 
         with open(Constants.path_to_config_file, "w") as jsonFile:
             json.dump(data, jsonFile, indent=4)
-    except:
+    except json.JSONDecodeError as e:
         print("Updating the default bandwidth in config.json failed!")
         exit(1)
 

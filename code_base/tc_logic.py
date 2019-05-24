@@ -1,5 +1,7 @@
 from code_base.tc_command_generator import TCCommandGenerator
 from code_base.cmd_executor import CmdExecutor
+from code_base.systeminfo import is_ipv4
+
 
 class TcQdisc:
 
@@ -25,7 +27,6 @@ class IngressQdisc(TcQdisc):
     def make(self):
         tcg = TCCommandGenerator()
         print("Make ingress QDISC")
-        # print(tcg.add_ingress_qdisc(self))
         CmdExecutor.run_and_print(tcg.add_ingress_qdisc(self))
         self.redirect_filter.make()
 
@@ -56,7 +57,6 @@ class EgressQdisc(TcQdisc):
     def make(self):
         tcg = TCCommandGenerator()
         print("Make egress QDISC")
-        # print(tcg.add_egress_qdisc(self))
         CmdExecutor.run_and_print(tcg.add_egress_qdisc(self))
         self.default_class.make()
         for tc_class in self.classes:
@@ -80,7 +80,6 @@ class TcClass:
     def make(self):
         tcg = TCCommandGenerator()
         print("Make TcClass")
-        # print(tcg.add_class(self))
         CmdExecutor.run_and_print(tcg.add_class(self))
 
 
@@ -91,7 +90,6 @@ class DefaultClass(TcClass):
     def make(self):
         tcg = TCCommandGenerator()
         print("Make Default Class")
-        # print(tcg.add_class(self))
         CmdExecutor.run_and_print(tcg.add_class(self))
 
 
@@ -105,16 +103,19 @@ class ClassifierFilter(TcFilter):
     def __init__(self, dev, target_class, ip_addr):
         TcFilter.__init__(self, dev=dev)
         self.target_class = target_class
-        self.ip_addr = ip_addr
-        if self.parent == TcQdisc.root_qdisc_handle:
-            self.direction = 'dst'
+        if is_ipv4(ip_addr=ip_addr):
+            self.ip_addr = ip_addr+'/32'
         else:
+            self.ip_addr = ip_addr
+            print(ip_addr+"  is not a IPv4 address. Currently only IPv4 addresses are supported.")
+        if dev.is_virtual:
             self.direction = 'src'
+        else:
+            self.direction = 'dst'
 
     def make(self):
         tcg = TCCommandGenerator()
         print("Make ClassifierFilter")
-        # print(tcg.add_classifier_filter(self))
         CmdExecutor.run_and_print(tcg.add_classifier_filter(self))
 
 
@@ -126,5 +127,4 @@ class RedirectFilter(TcFilter):
     def make(self):
         tcg = TCCommandGenerator()
         print("Make RedirectFilter")
-        # print(tcg.add_redirect_filter(self))
         CmdExecutor.run_and_print(tcg.add_redirect_filter(self))

@@ -80,7 +80,7 @@ class TCCommandGenerator:
         # sudo tc filter add dev ens33 u32 match ip dst 192.168.17.129/32 flowid 1:1
         str_dev = str(classifier_filter.dev.name)
         str_direction = str(classifier_filter.direction)
-        str_ip_addr = str(classifier_filter.target_class)
+        str_ip_addr = str(classifier_filter.ip_addr)
         str_flowid = str(classifier_filter.parent) + ':' + str(classifier_filter.target_class)
         return self._join([self.FILTER_ADD, str_dev, 'u32', 'match', 'ip', str_direction, str_ip_addr, 'flowid',
                            str_flowid])

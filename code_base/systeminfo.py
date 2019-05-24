@@ -61,3 +61,16 @@ def get_default_interface():
                 return words[len(words)-1]
     except subprocess.CalledProcessError as e:
         print("Not able to run sudo route")
+
+
+def is_ipv4(ip_addr):
+    """
+    Check if ip_addr is a IPv4 address. If not it can be IPv6 or an invalid address
+    :param ip_addr:
+    :return:
+    """
+    no_of_bytes = len(ip_addr.split('.'))
+    if no_of_bytes == 4:
+        return True
+    else:
+        return False
