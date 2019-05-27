@@ -70,8 +70,8 @@ def reset():
     Reset previously set bandwidth limitations
     :return:
     """
-    # TODO(mmeinen): implement
-    print("Reset not implemented yet...")
+    bwc = BandwidthConfigurator()
+    bwc.reset()
 
 
 def show():

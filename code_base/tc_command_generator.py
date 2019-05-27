@@ -3,6 +3,7 @@ class TCCommandGenerator:
     QDISC_ADD = TC+" qdisc add dev"
     CLASS_ADD = TC + " class add dev"
     FILTER_ADD = TC + " filter add dev"
+    QDISC_DELETE = TC + " qdisc delete dev"
 
     def __init__(self):
         pass
@@ -98,3 +99,18 @@ class TCCommandGenerator:
         return self._join([self.FILTER_ADD, str_dev, 'parent', str_parent, 'protocol', 'ip', 'u32', 'match', 'u32', '0',
                            '0', 'action', 'mirred', 'egress', 'redirect', 'dev', str_target_dev])
 
+    def delete_root_qdisc(self, iface_name):
+        """
+        Return the command to delete a root qdisc
+        :param iface_name: the name of the interface on which we delete the root qdisc
+        :return: the TC command
+        """
+        return self._join([self.QDISC_DELETE, iface_name, 'root'])
+
+    def delete_ingress_qdisc(self, iface_name):
+        """
+        Return the command to delete a ingress qdisc
+        :param iface_name: the name of the interface on which we delete the root qdisc
+        :return: the TC command
+        """
+        return self._join([self.QDISC_DELETE, iface_name, 'ingress'])

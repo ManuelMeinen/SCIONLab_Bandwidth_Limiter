@@ -93,7 +93,7 @@ class VirtualInterfacesManager:
         :return: Virtual interfaces that are defined
         """
         cmd = "sudo ip link show"
-        out = CmdExecutor.run_and_return_result_and_print_command(cmd=cmd)
+        out = CmdExecutor.run_and_return_result(cmd=cmd)
         interfaces = []
         rows = out.split("\n")
         relevant_row = True

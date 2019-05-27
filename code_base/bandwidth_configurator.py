@@ -2,12 +2,14 @@ import json
 from code_base.links import Links
 from code_base.tc_logic import EgressQdisc, IngressQdisc, DefaultClass, TcClass, ClassifierFilter, RedirectFilter
 from code_base.constants import Constants
+from code_base.virtual_interfaces_manager import VirtualInterfacesManager
+from code_base.cmd_executor import CmdExecutor
+from code_base.tc_command_generator import TCCommandGenerator
 
 
 class BandwidthConfigurator:
 
     def __init__(self):
-        # Note that Links() also sets up the necessary virtual interfaces
         links = Links()
         self.links = links
 
@@ -16,6 +18,10 @@ class BandwidthConfigurator:
         Limit the bandwidth according to the link_info.json file
         :return:
         """
+        self.reset()
+        print("###################### Setting up virtual interfaces ######################")
+        self.links.set_up_virtual_interfaces()
+
         default_bandwidth = 0
         try:
             with open(Constants.path_to_config_file, "r") as jsonFile:
@@ -57,5 +63,16 @@ class BandwidthConfigurator:
         Reset previously set bandwidth limitations
         :return:
         """
-        # TODO(mmeinen) implement
-        pass
+        vim = VirtualInterfacesManager()
+        tcg = TCCommandGenerator()
+        for dev in self.links.used_interfaces:
+            print("###################### Reset interface " + dev.name + " ######################")
+            CmdExecutor.run_and_print(tcg.delete_root_qdisc(dev.name))
+            CmdExecutor.run_and_print(tcg.delete_ingress_qdisc(dev.name))
+        print(" ###################### Delete virtual interfaces  ######################")
+        vim.delete_virtual_interfaces()
+
+
+
+
+

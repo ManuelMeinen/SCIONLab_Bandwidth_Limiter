@@ -9,7 +9,7 @@ class Links:
 
     def __init__(self):
         """
-        For all links define link objects and set up the interfaces (both physical and virtual ones).
+        For all links define link objects and set up the interfaces (physical).
         """
         with open(Constants.path_to_config_file)as s:
             data_string = json.load(s)
@@ -31,7 +31,13 @@ class Links:
                 self.used_interfaces.append(dev)
             link_obj = Link(as_id, is_user_as, bandwidth, other_ip_addr, dev)
             self.links.append(link_obj)
+        self.virtual_interfaces = {}
 
+    def set_up_virtual_interfaces(self):
+        """
+        For every used physical interface set up a virtual interface
+        :return:
+        """
         vim = VirtualInterfacesManager()
         vim.set_used_interfaces(self.used_interfaces)
         vim.set_up_virtual_interfaces()
