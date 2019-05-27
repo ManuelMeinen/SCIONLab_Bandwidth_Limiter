@@ -79,8 +79,8 @@ def show():
     Show current TC configuration
     :return:
     """
-    # TODO(mmeinen): implement
-    print("Show not implemented yet...")
+    bwc = BandwidthConfigurator()
+    bwc.show()
 
 
 def show_help():

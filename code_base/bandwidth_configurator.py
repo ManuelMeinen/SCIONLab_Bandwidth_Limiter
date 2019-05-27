@@ -5,6 +5,7 @@ from code_base.constants import Constants
 from code_base.virtual_interfaces_manager import VirtualInterfacesManager
 from code_base.cmd_executor import CmdExecutor
 from code_base.tc_command_generator import TCCommandGenerator
+from code_base.systeminfo import get_interface_names
 
 
 class BandwidthConfigurator:
@@ -69,10 +70,28 @@ class BandwidthConfigurator:
             print("###################### Reset interface " + dev.name + " ######################")
             CmdExecutor.run_and_print(tcg.delete_root_qdisc(dev.name))
             CmdExecutor.run_and_print(tcg.delete_ingress_qdisc(dev.name))
-        print(" ###################### Delete virtual interfaces  ######################")
+        print("###################### Delete virtual interfaces  ######################")
         vim.delete_virtual_interfaces()
 
-
-
-
-
+    def show(self):
+        """
+        Show the current TC configuration
+        :return:
+        """
+        interfaces = get_interface_names()
+        tcg = TCCommandGenerator()
+        print("#############################QDISC#############################")
+        for dev in interfaces:
+            print("-----------------------------DEV=" + dev + "-----------------------------")
+            CmdExecutor.run_and_print(tcg.show_qdiscs(iface_name=dev))
+        print("#############################CLASS#############################")
+        for dev in interfaces:
+            print("-----------------------------DEV=" + dev + "-----------------------------")
+            CmdExecutor.run_and_print(tcg.show_classes(iface_name=dev))
+        print("#############################FILTER#############################")
+        for dev in interfaces:
+            print("-----------------------------DEV=" + dev + "-----------------------------")
+            print("*****************************Egress Filters*****************************")
+            CmdExecutor.run_and_print(tcg.show_egress_filter(iface_name=dev))
+            print("*****************************Ingress Filters*****************************")
+            CmdExecutor.run_and_print(tcg.show_ingress_filter(iface_name=dev))

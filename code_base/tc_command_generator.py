@@ -1,9 +1,15 @@
+from code_base.constants import Constants
+
+
 class TCCommandGenerator:
-    TC = "sudo tc"
-    QDISC_ADD = TC+" qdisc add dev"
-    CLASS_ADD = TC + " class add dev"
-    FILTER_ADD = TC + " filter add dev"
-    QDISC_DELETE = TC + " qdisc delete dev"
+    TC = "sudo tc "
+    QDISC_ADD = TC+"qdisc add dev"
+    CLASS_ADD = TC + "class add dev"
+    FILTER_ADD = TC + "filter add dev"
+    QDISC_DELETE = TC + "qdisc delete dev"
+    QDISC_SHOW = TC + "-j qdisc show dev"
+    CLASS_SHOW = TC + "-j class show dev"
+    FILTER_SHOW = TC + "-j filter show dev"
 
     def __init__(self):
         pass
@@ -38,7 +44,7 @@ class TCCommandGenerator:
         """
         str_dev = str(egress_qdisc.dev.name)
         str_handle = str(egress_qdisc.handle) + ':'
-        str_default_class_handle = str(egress_qdisc.default_class_handle)
+        str_default_class_handle = str(Constants.default_class_handle)
         return self._join([self.QDISC_ADD, str_dev, 'root', 'handle', str_handle, 'htb', 'default',
                            str_default_class_handle])
 
@@ -114,3 +120,36 @@ class TCCommandGenerator:
         :return: the TC command
         """
         return self._join([self.QDISC_DELETE, iface_name, 'ingress'])
+
+    def show_qdiscs(self, iface_name):
+        """
+        Return the command to show the qdiscs configured for that interface
+        :param iface_name: the name of the interface
+        :return: the TC command
+        """
+        return self._join([self.QDISC_SHOW, iface_name])
+
+    def show_classes(self, iface_name):
+        """
+        Return the command to show the classes configured for that interface
+        :param iface_name: the name of the interface
+        :return: the TC command
+        """
+        return self._join([self.CLASS_SHOW, iface_name])
+
+    def show_egress_filter(self, iface_name):
+        """
+        Return the command to show the egress filters configured for that interface
+        :param iface_name: the name of the interface
+        :return: the TC command
+        """
+        return self._join([self.FILTER_SHOW, iface_name])
+
+    def show_ingress_filter(self, iface_name):
+        """
+        Return the command to show the ingress filters configured for that interface
+        :param iface_name: the name of the interface
+        :return: the TC command
+        """
+        str_parent = str(Constants.ingress_qdisc_handle) + ':'
+        return self._join([self.FILTER_SHOW, iface_name, 'parent', str_parent])

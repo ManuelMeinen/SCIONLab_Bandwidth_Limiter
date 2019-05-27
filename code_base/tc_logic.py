@@ -1,14 +1,10 @@
 from code_base.tc_command_generator import TCCommandGenerator
 from code_base.cmd_executor import CmdExecutor
 from code_base.systeminfo import is_ipv4
+from code_base.constants import Constants
 
 
 class TcQdisc:
-
-    root_qdisc_handle = 1
-    ingress_qdisc_handle = 'ffff'
-    virtual_qdisc_handle = 2
-    default_class_handle = 9999
 
     def __init__(self, dev):
         self.dev = dev
@@ -18,7 +14,7 @@ class IngressQdisc(TcQdisc):
 
     def __init__(self, dev):
         TcQdisc.__init__(self, dev)
-        self.handle = self.ingress_qdisc_handle
+        self.handle = Constants.ingress_qdisc_handle
 
     def add_filter(self, redirect_filter):
         """
@@ -45,9 +41,9 @@ class EgressQdisc(TcQdisc):
     def __init__(self, dev):
         TcQdisc.__init__(self, dev)
         if dev.is_virtual:
-            self.handle = self.virtual_qdisc_handle
+            self.handle = Constants.virtual_qdisc_handle
         else:
-            self.handle = self.root_qdisc_handle
+            self.handle = Constants.root_qdisc_handle
         self.classes = []
         self.filters = []
 
@@ -117,7 +113,7 @@ class TcClass:
 
 class DefaultClass(TcClass):
     def __init__(self, dev, bandwidth):
-        TcClass.__init__(self, dev=dev, classid=TcQdisc.default_class_handle, bandwidth=bandwidth)
+        TcClass.__init__(self, dev=dev, classid=Constants.default_class_handle, bandwidth=bandwidth)
 
     def make(self):
         """
