@@ -98,12 +98,22 @@ class TCCommandGenerator:
         :param redirect_filter: the filter to add
         :return: the TC command
         """
-        # TODO(mmeinen) check how redirect filters would work for IPv6
+        # TODO(mmeinen) Test if the redirect command works as expected
         str_dev = str(redirect_filter.dev.name)
         str_parent = str(redirect_filter.parent) + ':'
         str_target_dev = str(redirect_filter.target_dev.name)
-        return self._join([self.FILTER_ADD, str_dev, 'parent', str_parent, 'protocol', 'ip', 'u32', 'match', 'u32', '0',
-                           '0', 'action', 'mirred', 'egress', 'redirect', 'dev', str_target_dev])
+        if redirect_filter.ip_version == 4:
+            str_protocol = 'ip'
+            str_ip = 'ip'
+            str_ip_addr = '0.0.0.0/0'
+        else:
+            str_protocol = 'ipv6'
+            str_ip = 'ip6'
+            str_ip_addr = '::0/0'
+        return self._join([self.FILTER_ADD, str_dev, 'parent', str_parent, 'protocol', str_protocol, 'u32', 'match',
+                           str_ip, 'src', str_ip_addr, 'action', 'mirred', 'egress', 'redirect', 'dev', str_target_dev])
+        # return self._join([self.FILTER_ADD, str_dev, 'parent', str_parent, 'protocol', 'ip', 'u32', 'match', 'u32', '0',
+        #                    '0', 'action', 'mirred', 'egress', 'redirect', 'dev', str_target_dev])
 
     def delete_root_qdisc(self, iface_name):
         """

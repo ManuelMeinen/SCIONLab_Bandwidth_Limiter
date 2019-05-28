@@ -15,6 +15,7 @@ class IngressQdisc(TcQdisc):
     def __init__(self, dev):
         TcQdisc.__init__(self, dev)
         self.handle = Constants.ingress_qdisc_handle
+        self.filters = []
 
     def add_filter(self, redirect_filter):
         """
@@ -23,7 +24,7 @@ class IngressQdisc(TcQdisc):
         :return:
         """
         redirect_filter.parent = self.handle
-        self.redirect_filter = redirect_filter
+        self.filters.append(redirect_filter)
 
     def make(self):
         """
@@ -33,7 +34,8 @@ class IngressQdisc(TcQdisc):
         tcg = TCCommandGenerator()
         print("Make ingress QDISC")
         CmdExecutor.run_and_print(tcg.add_ingress_qdisc(self))
-        self.redirect_filter.make()
+        for redirect_filter in self.filters:
+            redirect_filter.make()
 
 
 class EgressQdisc(TcQdisc):
@@ -126,23 +128,23 @@ class DefaultClass(TcClass):
 
 
 class TcFilter:
-    def __init__(self, dev):
+    def __init__(self, dev, ip_version):
         self.dev = dev
         self.parent = 0 # Is set by adding it to the qdisc
+        self.ip_version = ip_version
 
 
 class ClassifierFilter(TcFilter):
     def __init__(self, dev, target_class, ip_addr):
-        TcFilter.__init__(self, dev=dev)
-        self.target_class = target_class
-        # TODO(mmeinen) add support for IPv6 (protocol = ipv6 instead of ip and match ip6 instead of ip)
         if is_ipv4(ip_addr=ip_addr):
             self.ip_addr = ip_addr+'/32'
-            self.ip_version = 4
+            TcFilter.__init__(self, dev=dev, ip_version=4)
         else:
             self.ip_addr = ip_addr+'/128'
             self.ip_version = 6
+            TcFilter.__init__(self, dev=dev, ip_version=6)
             print(ip_addr+"  is not a IPv4 address. Currently only IPv4 addresses are supported.")
+        self.target_class = target_class
         if dev.is_virtual:
             self.direction = 'src'
         else:
@@ -159,8 +161,8 @@ class ClassifierFilter(TcFilter):
 
 
 class RedirectFilter(TcFilter):
-    def __init__(self, dev, target_dev):
-        TcFilter.__init__(self, dev=dev)
+    def __init__(self, dev, target_dev, ip_version):
+        TcFilter.__init__(self, dev=dev, ip_version=ip_version)
         self.target_dev = target_dev
 
     def make(self):
@@ -168,7 +170,6 @@ class RedirectFilter(TcFilter):
         Recursively turn the TC logic into TC configuration
         :return:
         """
-        # TODO(mmeinen) also add a redirect filter for IPv6
         tcg = TCCommandGenerator()
         print("Make RedirectFilter")
         CmdExecutor.run_and_print(tcg.add_redirect_filter(self))

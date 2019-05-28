@@ -39,10 +39,12 @@ class BandwidthConfigurator:
             virtual_qdisc = EgressQdisc(dev=virtual_dev)
             default_egress_class = DefaultClass(dev=dev, bandwidth=default_bandwidth)
             default_virtual_class = DefaultClass(dev=virtual_dev, bandwidth=default_bandwidth)
-            redirect_filter = RedirectFilter(dev=dev, target_dev=virtual_dev)
+            redirect_filter_ipv4 = RedirectFilter(dev=dev, target_dev=virtual_dev, ip_version=4)
+            redirect_filter_ipv6 = RedirectFilter(dev=dev, target_dev=virtual_dev, ip_version=6)
             root_egress_qdisc.add_default_class(default_egress_class)
             virtual_qdisc.add_default_class(default_virtual_class)
-            ingress_qdisc.add_filter(redirect_filter)
+            ingress_qdisc.add_filter(redirect_filter_ipv4)
+            ingress_qdisc.add_filter(redirect_filter_ipv6)
             for link in self.links.links:
                 if link.dev == dev and link.is_user_as:
                     # Configure interface for this link
