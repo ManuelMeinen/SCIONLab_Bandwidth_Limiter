@@ -28,19 +28,19 @@
     },
     "Usage": {
       "Example1": {
-        "Command": "python3 main.py -l",
+        "Command": "./scionlab_bw_limiter -l",
         "Description": "Limit the bandwidth according to the link_info.json file."
       },
       "Example2": {
-        "Command": "python3 main.py -r",
+        "Command": "./scionlab_bw_limiter -r",
         "Description": "Reset any bandwidth limitations."
       },
       "Example3": {
-        "Command": "python3 main.py -s",
+        "Command": "./scionlab_bw_limiter -s",
         "Description": "Show the current TC configuration."
       },
       "Example4": {
-        "Command": "python3 main.py -l -b 1000 -p /path/to/link/info.json",
+        "Command": "./scionlab_bw_limiter -l -b 1000 -p /path/to/link/info.json",
         "Description": "Update the path to the link_info.json file, update the default bandwidth and then limit the bandwith according to the link_info.json file."
       }
     }
