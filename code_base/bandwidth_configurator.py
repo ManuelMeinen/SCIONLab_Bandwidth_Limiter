@@ -68,8 +68,12 @@ class BandwidthConfigurator:
         tcg = TCCommandGenerator()
         for dev in self.links.used_interfaces:
             print("###################### Reset interface " + dev.name + " ######################")
-            CmdExecutor.run_and_print(tcg.delete_root_qdisc(dev.name))
-            CmdExecutor.run_and_print(tcg.delete_ingress_qdisc(dev.name))
+            out = CmdExecutor.run_and_return_result_and_print_command(tcg.delete_root_qdisc(dev.name))
+            if not out == "":
+                print("Root QDISC did not exist...")
+            out = CmdExecutor.run_and_return_result_and_print_command(tcg.delete_ingress_qdisc(dev.name))
+            if not out == "":
+                print("Ingress QDISC did not exist...")
         print("###################### Delete virtual interfaces  ######################")
         vim.delete_virtual_interfaces()
 

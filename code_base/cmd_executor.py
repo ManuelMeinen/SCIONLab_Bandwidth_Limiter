@@ -16,8 +16,8 @@ class CmdExecutor:
         try:
             subprocess.check_call(cmd, universal_newlines=True, shell=True)
         except subprocess.CalledProcessError as e:
-            print("The following command was not executed successfully!")
             print(cmd)
+            print("The command terminated with errors!")
 
     @staticmethod
     def run_and_print(cmd):
@@ -26,16 +26,13 @@ class CmdExecutor:
         :param cmd: the command to execute
         :return:
         """
-        out = ""
         try:
             print(cmd)
-            out = subprocess.check_output(cmd, universal_newlines=True, shell=True)
+            out = subprocess.check_output(cmd, universal_newlines=True, shell=True, stderr=subprocess.STDOUT)
             print(out)
         except subprocess.CalledProcessError as e:
-            print("The following command was not executed successfully!")
-            print(cmd)
-            print("It returned:")
-            print(out)
+            print("The command terminated with errors!")
+            print(subprocess.STDOUT)
 
     @staticmethod
     def run_and_return_result(cmd):
@@ -44,15 +41,13 @@ class CmdExecutor:
         :param cmd: the command to execute
         :return: the returned output
         """
-        out = ""
         try:
-            out = subprocess.check_output(cmd, universal_newlines=True, shell=True)
+            out = subprocess.check_output(cmd, universal_newlines=True, shell=True, stderr=subprocess.STDOUT)
             return out
         except subprocess.CalledProcessError as e:
-            print("The following command was not executed successfully!")
             print(cmd)
-            print("It returned:")
-            print(out)
+            print("The command terminated with errors!")
+            return subprocess.STDOUT
 
     @staticmethod
     def run_and_return_result_and_print_command(cmd):
@@ -61,13 +56,10 @@ class CmdExecutor:
         :param cmd: the command to execute
         :return: the returned output
         """
-        out = ""
         try:
             print(cmd)
-            out = subprocess.check_output(cmd, universal_newlines=True, shell=True)
+            out = subprocess.check_output(cmd, universal_newlines=True, shell=True, stderr=subprocess.STDOUT)
             return out
         except subprocess.CalledProcessError as e:
-            print("The following command was not executed successfully!")
-            print(cmd)
-            print("It returned:")
-            print(out)
+            print("The command terminated with errors!")
+            return subprocess.STDOUT
