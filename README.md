@@ -8,18 +8,18 @@ It limits the bandwidth per IP-address for user-ASes using TC according to the c
 
 To use this program clone it to the attachment point and run 
 
-``python3 main.py -b DEFAULT_BANDWIDTH -p PATH/TO/LINK/INFO/FILE``
+``./sconlab_bw_limiter -b DEFAULT_BANDWIDTH -p PATH/TO/LINK/INFO/FILE``
 
 
 After that you are good to go. You can now use the following commands:
 
-``python3 main.py -h`` (show help text)
+``./sconlab_bw_limiter -h`` (show help text)
 
-``python3 main.py -l`` (limit the bandwidth)
+``./sconlab_bw_limiter -l`` (limit the bandwidth)
 
-``python3 main.py -r`` (reset bandwidth limitations)
+``./sconlab_bw_limiter -r`` (reset bandwidth limitations)
 
-``python3 main.py -s`` (show current TC configuration)
+``./sconlab_bw_limiter -s`` (show current TC configuration)
 
 ### Prerequisites
 
