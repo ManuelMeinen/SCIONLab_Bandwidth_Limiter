@@ -65,6 +65,6 @@ class Interface:
                 if word == 'mtu':
                     return int(words[words.index(word)+1])
                 else:
-                    word[4:]
+                    return int(word[4:])
         print("MTU was not determined successfully.")
         return 0
