@@ -42,19 +42,21 @@ def main(args):
                 update_default_bw(args[bw_index])
             args.remove(args[bw_index])
             args.remove(args[bw_index-1])
+
         if len(args) > 1:
             error_exit()
         else:
-            if limit_option in args:
-                limit()
-            else:
-                if reset_option in args:
-                    reset()
+            if len(args) == 1:
+                if limit_option in args:
+                    limit()
                 else:
-                    if show_option in args:
-                        show()
+                    if reset_option in args:
+                        reset()
                     else:
-                        error_exit()
+                        if show_option in args:
+                            show()
+                        else:
+                            error_exit()
 
 
 def limit():
