@@ -62,7 +62,6 @@ class Interface:
 
         for word in words:
             if word == 'mtu' or word[0:3] == 'MTU':
-                print(word)
                 if word == 'mtu':
                     return int(words[words.index(word)+1])
                 else:
