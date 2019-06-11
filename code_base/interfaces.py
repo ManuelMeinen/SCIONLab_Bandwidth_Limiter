@@ -59,7 +59,9 @@ class Interface:
         cmd = "ifconfig "+str(self.name)
         out = subprocess.check_output(cmd, universal_newlines=True, shell=True)
         words = out.split(" ")
+
         for word in words:
+            print(word)
             if word == 'mtu' or word == 'MTU':
                 return int(words[words.index(word)+1])
         print("MTU was not determined successfully.")
