@@ -61,8 +61,10 @@ class Interface:
         words = out.split(" ")
 
         for word in words:
-            print(word)
-            if word == 'mtu' or word == 'MTU':
-                return int(words[words.index(word)+1])
+            if word == 'mtu' or word[0:3] == 'MTU':
+                if word == 'mtu':
+                    return int(words[words.index(word)+1])
+                else:
+                    word[4:]
         print("MTU was not determined successfully.")
         return 0
