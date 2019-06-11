@@ -60,7 +60,7 @@ class Interface:
         out = subprocess.check_output(cmd, universal_newlines=True, shell=True)
         words = out.split(" ")
         for word in words:
-            if word == 'mtu':
+            if word == 'mtu' or word == 'MTU':
                 return int(words[words.index(word)+1])
         print("MTU was not determined successfully.")
         return 0
