@@ -7,9 +7,9 @@ class TCCommandGenerator:
     CLASS_ADD = TC + "class add dev"
     FILTER_ADD = TC + "filter add dev"
     QDISC_DELETE = TC + "qdisc delete dev"
-    QDISC_SHOW = TC + "-j qdisc show dev"
-    CLASS_SHOW = TC + "-j class show dev"
-    FILTER_SHOW = TC + "-j filter show dev"
+    QDISC_SHOW = TC + "qdisc show dev"
+    CLASS_SHOW = TC + "class show dev"
+    FILTER_SHOW = TC + "filter show dev"
 
     def __init__(self):
         pass
