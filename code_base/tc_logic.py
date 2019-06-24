@@ -143,7 +143,6 @@ class ClassifierFilter(TcFilter):
             self.ip_addr = ip_addr+'/128'
             self.ip_version = 6
             TcFilter.__init__(self, dev=dev, ip_version=6)
-            print(ip_addr+"  is not a IPv4 address. Currently only IPv4 addresses are supported.")
         self.target_class = target_class
         if dev.is_virtual:
             self.direction = 'src'

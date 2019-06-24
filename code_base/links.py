@@ -27,11 +27,25 @@ class Links:
             bandwidth = links[link]['Bandwidth']
             other_ip_addr = links[link]['IP-Address']
             dev = interfaces.get_interface(systeminfo.get_interface_used_for_connection(other_ip_addr))
-            if is_user_as and dev not in self.used_interfaces:
+            if is_user_as and self._dev_not_in_used_interfaces(dev=dev):
                 self.used_interfaces.append(dev)
             link_obj = Link(as_id, is_user_as, bandwidth, other_ip_addr, dev)
             self.links.append(link_obj)
         self.virtual_interfaces = {}
+
+    def _dev_not_in_used_interfaces(self, dev):
+        """
+        Is the device dev not yet defined in the set self.used_interfaces?
+        :param dev: The device to test
+        :return: True iff dev is not yet in self.used_interfaces, False otherwise
+        """
+        used_interfaces_names = []
+        for iface in self.used_interfaces:
+            used_interfaces_names.append(iface.name)
+        if dev.name in used_interfaces_names:
+            return False
+        else:
+            return True
 
     def set_up_virtual_interfaces(self):
         """

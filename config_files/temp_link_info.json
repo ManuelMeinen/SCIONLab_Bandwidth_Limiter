@@ -9,6 +9,12 @@
         "AS_ID": 1,
         "IsUserAS": true,
         "Bandwidth": 500,
+        "IP-Address": "fe80::20c:29ff:fe08:993c"
+    },
+    "3": {
+        "AS_ID": 2,
+        "IsUserAS": true,
+        "Bandwidth": 500,
         "IP-Address": "192.168.17.129"
     }
 }

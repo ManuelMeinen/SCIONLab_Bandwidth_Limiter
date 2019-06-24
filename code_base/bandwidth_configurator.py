@@ -46,7 +46,7 @@ class BandwidthConfigurator:
             ingress_qdisc.add_filter(redirect_filter_ipv4)
             ingress_qdisc.add_filter(redirect_filter_ipv6)
             for link in self.links.links:
-                if link.dev == dev and link.is_user_as:
+                if link.dev.name == dev.name and link.is_user_as:
                     # Configure interface for this link
                     egress_class = TcClass(dev=dev, classid=link.as_id, bandwidth=link.bandwidth)
                     egress_filter = ClassifierFilter(dev=dev, ip_addr=link.ip_addr, target_class=link.as_id)
