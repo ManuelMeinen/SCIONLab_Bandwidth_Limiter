@@ -1,4 +1,4 @@
-# SCIONLab bandwidth limiter
+# SCIONLab Bandwidth Limiter
 
 This program is supposed to be used on an attachment point of the SCIONLab network. 
 It limits the bandwidth per IP-address for user-ASes using TC according to the configuration in the link_info.json file obtained by the SCIONLab server.
@@ -28,7 +28,7 @@ To be able to run this program you need Python3 and TC (iproute2) installed on y
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details
+This project is licensed under the Apache License 2.0 - see the [LICENSE](LICENSE) file for details
 
 ## About SCION/SCIONLab
 To learn more about SCIONLab visit:   
