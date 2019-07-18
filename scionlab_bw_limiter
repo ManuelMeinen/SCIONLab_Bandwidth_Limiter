@@ -36,6 +36,8 @@ def main(args):
     :param args: command line inputs
     :return:
     """
+    if len(args) == 0:
+        error_exit()
     if help_option in args and len(args) == 1:
         show_help()
     else:
